@@ -8,49 +8,65 @@ import pandas as pd
 import random as rnd
 import numpy as np 
 import matplotlib.pyplot as plt
-import sys
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--teams", "-t", help="Supply two teams to calculate against", nargs=2);
+args = parser.parse_args()
 
-
+print(args.teams)
 
 gdf = pd.read_csv('2019_scores.csv')
 
 
-print(sys.argv);
-
 gdf.columns
 
-WASdf = gdf[gdf.Team == 'WAS']
-GSWdf = gdf[gdf.Team == 'GSW']
+team1 = args.teams[0]
+team2 = args.teams[1]
 
-WASmeanpts = WASdf.TeamPoints.mean()
-GSWmeanpts = GSWdf.TeamPoints.mean()
-WASsdpts = WASdf.TeamPoints.std()
-GSWsdpts = GSWdf.TeamPoints.std()
+Team1df = gdf[gdf.Team == team1]
+Team2df = gdf[gdf.Team == team2]
 
-WASmeaGSWpp = WASdf.OpponentPoints.mean()
-GSWmeaGSWpp = GSWdf.OpponentPoints.mean()
-WASsdopp = WASdf.OpponentPoints.std()
-GSWsdopp = GSWdf.OpponentPoints.std()
+Team1meanpts = Team1df.TeamPoints.mean()
+Team2meanpts = Team2df.TeamPoints.mean()
+Team1sdpts = Team1df.TeamPoints.std()
+Team2sdpts = Team2df.TeamPoints.std()
 
-print("WAS Points Mean ", WASmeanpts)
-print("WAS Points SD ", WASsdpts)
-print("GSW Points Mean ", GSWmeanpts)
-print("GSW SD ", GSWsdpts)
+Team1meaTeam2pp = Team1df.OpponentPoints.mean()
+Team2meaTeam2pp = Team2df.OpponentPoints.mean()
+Team1sdopp = Team1df.OpponentPoints.std()
+Team2sdopp = Team2df.OpponentPoints.std()
 
-print("WAS OppPoints Mean ", WASmeaGSWpp)
-print("WAS OppPoints SD ", WASsdopp)
-print("GSW OppPoints Mean ", GSWmeaGSWpp)
-print("GSW OppPoints SD ", GSWsdopp)
+output = {}
 
+output["%s Points Mean" % team1] = Team1meanpts
+output["%s Points SD" % team1] = Team1sdpts
+output["%s Points Mean" % team2] = Team2meanpts
+output["%s Points Mean" % team2] = Team2sdpts
+ 
+
+# print("Team1 Points Mean ", Team1meanpts)
+# print("Team1 Points SD ", Team1sdpts)
+# print("Team2 Points Mean ", Team2meanpts)
+# print("Team2 SD ", Team2sdpts)
+
+output["%s OppPoints Mean" % team1] = Team1meaTeam2pp
+output["%s OppPoints SD" % team1] = Team1sdopp
+output["%s OppPoints Mean" % team2] = Team2meaTeam2pp
+output["%s OppPoints Mean" % team2] = Team2sdopp
+
+# print("Team1 OppPoints Mean ", Team1meaTeam2pp)
+# print("Team1 OppPoints SD ", Team1sdopp)
+# print("Team2 OppPoints Mean ", Team2meaTeam2pp)
+# print("Team2 OppPoints SD ", Team2sdopp)
 
 
 def gameSim():
-    WASScore = (rnd.gauss(WASmeanpts,WASsdpts)+ rnd.gauss(GSWmeaGSWpp,GSWsdopp))/2
-    GSWScore = (rnd.gauss(GSWmeanpts,GSWsdpts)+ rnd.gauss(WASmeaGSWpp,WASsdopp))/2
-    if int(round(WASScore)) > int(round(GSWScore)):
+    Team1Score = (rnd.gauss(Team1meanpts,Team1sdpts)+ rnd.gauss(Team2meaTeam2pp,Team2sdopp))/2
+    Team2Score = (rnd.gauss(Team2meanpts,Team2sdpts)+ rnd.gauss(Team1meaTeam2pp,Team1sdopp))/2
+    if int(round(Team1Score)) > int(round(Team2Score)):
         return 1
-    elif int(round(WASScore)) < int(round(GSWScore)):
+    elif int(round(Team1Score)) < int(round(Team2Score)):
         return -1
     else: return 0
 
@@ -68,8 +84,8 @@ def gamesSim(ns):
         elif gm == -1:
             team2win +=1
         else: tie +=1
-    print('WAS Win ', team1win/(team1win+team2win+tie),'%')
-    print('GSW Win ', team2win/(team1win+team2win+tie),'%')
+    print('%s Win '  % team1, team1win/(team1win+team2win+tie),'%')
+    print('%s Win ' % team2, team2win/(team1win+team2win+tie),'%')
     print('Tie ', tie/(team1win+team2win+tie), '%')
     return gamesout
 

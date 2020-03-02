@@ -9,6 +9,10 @@ import random as rnd
 import numpy as np 
 import matplotlib.pyplot as plt
 import argparse
+import requests
+import nba_api
+from nba_api.stats.static import teams
+from nba_api.stats.endpoints import leaguegamefinder
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--teams", "-t", help="Supply two teams to calculate against", nargs=2);
@@ -17,12 +21,35 @@ args = parser.parse_args()
 print(args.teams)
 
 gdf = pd.read_csv('2019_scores.csv')
-
-
 gdf.columns
 
 team1 = args.teams[0]
 team2 = args.teams[1]
+print("Teams", args.teams)
+
+
+team1Return = teams.find_team_by_abbreviation(team1);
+team2Return = teams.find_team_by_abbreviation(team2)
+print(team1Return)
+print(team2Return)
+
+# Check for teams last 5 games results
+
+gamefinder1 = leaguegamefinder.LeagueGameFinder(team_id_nullable=team1Return["id"])
+# The first DataFrame of those returned is what we want.
+games1 = gamefinder1.get_data_frames()[0]
+
+team1Record = games1.head()["WL"]
+
+gamefinder2 = leaguegamefinder.LeagueGameFinder(team_id_nullable=team2Return["id"])
+# The first DataFrame of those returned is what we want.
+games2 = gamefinder2.get_data_frames()[0]
+
+team2Record = games2.head()["WL"]
+
+print(team1, team1Record)
+print(team2, team2Record)
+
 
 Team1df = gdf[gdf.Team == team1]
 Team2df = gdf[gdf.Team == team2]

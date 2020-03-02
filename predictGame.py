@@ -37,28 +37,28 @@ Team2meaTeam2pp = Team2df.OpponentPoints.mean()
 Team1sdopp = Team1df.OpponentPoints.std()
 Team2sdopp = Team2df.OpponentPoints.std()
 
-output = {}
+# output = {}
 
-output["%s Points Mean" % team1] = Team1meanpts
-output["%s Points SD" % team1] = Team1sdpts
-output["%s Points Mean" % team2] = Team2meanpts
-output["%s Points Mean" % team2] = Team2sdpts
+# output["%s Points Mean" % team1] = Team1meanpts
+# output["%s Points SD" % team1] = Team1sdpts
+# output["%s Points Mean" % team2] = Team2meanpts
+# output["%s Points Mean" % team2] = Team2sdpts
  
 
-# print("Team1 Points Mean ", Team1meanpts)
-# print("Team1 Points SD ", Team1sdpts)
-# print("Team2 Points Mean ", Team2meanpts)
-# print("Team2 SD ", Team2sdpts)
+print("%s Points Mean " % team1, Team1meanpts)
+print("%s Points SD " % team1, Team1sdpts)
+print("%s Points Mean " % team2, Team2meanpts)
+print("%s SD " % team2, Team2sdpts)
 
-output["%s OppPoints Mean" % team1] = Team1meaTeam2pp
-output["%s OppPoints SD" % team1] = Team1sdopp
-output["%s OppPoints Mean" % team2] = Team2meaTeam2pp
-output["%s OppPoints Mean" % team2] = Team2sdopp
+# output["%s OppPoints Mean" % team1] = Team1meaTeam2pp
+# output["%s OppPoints SD" % team1] = Team1sdopp
+# output["%s OppPoints Mean" % team2] = Team2meaTeam2pp
+# output["%s OppPoints Mean" % team2] = Team2sdopp
 
-# print("Team1 OppPoints Mean ", Team1meaTeam2pp)
-# print("Team1 OppPoints SD ", Team1sdopp)
-# print("Team2 OppPoints Mean ", Team2meaTeam2pp)
-# print("Team2 OppPoints SD ", Team2sdopp)
+print("%s OppPoints Mean " % team1, Team1meaTeam2pp)
+print("%s OppPoints SD " % team1, Team1sdopp)
+print("%s OppPoints Mean " % team2, Team2meaTeam2pp)
+print("%s OppPoints SD " % team2, Team2sdopp)
 
 
 def gameSim():

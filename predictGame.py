@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 import pandas as pd 
 import random as rnd
 import numpy as np 
@@ -47,8 +44,34 @@ games2 = gamefinder2.get_data_frames()[0]
 
 team2Record = games2.head()["WL"]
 
+
+
+def findAdvantage():
+    team1Games = 0
+    team2Games = 0
+    for i in range(len(team1Record)):
+        if team1Record[i] == "W":
+            team1Games += 1
+        if team2Record[i] == "W":
+            team2Games += 1
+    result = {}
+    if team1Games > team2Games:
+        result["team"] = team1
+        result["difference"] = team1Games - team2Games
+    else:
+        result["team"] = team2
+        result["difference"] =  team2Games - team1Games
+    return result
+
+# Rudimentary helper function to find the difference between each team's past 5 games
+print(findAdvantage())
+
+
 print(team1, team1Record)
 print(team2, team2Record)
+
+
+
 
 
 Team1df = gdf[gdf.Team == team1]

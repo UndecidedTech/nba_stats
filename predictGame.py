@@ -167,3 +167,6 @@ def gamesSim(ns):
 
 gamesSim(10000)
 
+
+
+# NOTES: Learn wtf a regression is so we can come up with a better way of calculating win% ...

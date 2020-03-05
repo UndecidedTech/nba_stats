@@ -15,20 +15,20 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--teams", "-t", help="Supply two teams to calculate against", nargs=2);
 args = parser.parse_args()
 
-print(args.teams)
+# print(args.teams)
 
 gdf = pd.read_csv('2019_scores.csv')
 gdf.columns
 
 team1 = args.teams[0]
 team2 = args.teams[1]
-print("Teams", args.teams)
+# print("Teams", args.teams)
 
 
-team1Return = teams.find_team_by_abbreviation(team1);
+team1Return = teams.find_team_by_abbreviation(team1)
 team2Return = teams.find_team_by_abbreviation(team2)
-print(team1Return)
-print(team2Return)
+# print(team1Return)
+# print(team2Return)
 
 # Check for teams last 5 games results
 
@@ -55,20 +55,18 @@ def findAdvantage():
     result = {}
     if team1Games > team2Games:
         result["team"] = team1
-        result["difference"] = team1Games - team2Games
+        result["diff"] = (team1Games - team2Games) * 2
     else:
         result["team"] = team2
-        result["difference"] =  team2Games - team1Games
+        result["diff"] =  (team2Games - team1Games) * 2
     return result
 
 # Rudimentary helper function to find the difference between each team's past 5 games
-print(findAdvantage())
+# print(findAdvantage())
 
 
-print(team1, team1Record)
-print(team2, team2Record)
-
-
+# print(team1, team1Record)
+# print(team2, team2Record)
 
 
 
@@ -91,7 +89,7 @@ Team2sdopp = Team2df.OpponentPoints.std()
 # output["%s Points SD" % team1] = Team1sdpts
 # output["%s Points Mean" % team2] = Team2meanpts
 # output["%s Points Mean" % team2] = Team2sdpts
- 
+
 
 print("%s Points Mean " % team1, Team1meanpts)
 print("%s Points SD " % team1, Team1sdpts)
@@ -132,11 +130,28 @@ def gamesSim(ns):
         elif gm == -1:
             team2win +=1
         else: tie +=1
-    #+ - percent from the return of findAdv() here before printing to console
+    #PRINT and assign pure w/l
     team1WinPct = team1win/(team1win+team2win+tie)
-
-    print('%s Win '  % team1, team1win/(team1win+team2win+tie),'%')
-    print('%s Win ' % team2, team2win/(team1win+team2win+tie),'%')
+    team2WinPct = team2win/(team1win+team2win+tie)
+    print("\n")
+    print("Raw Calculation")
+    print("------------------------------------------")
+    print('%s Pure Win '  % team1, team1WinPct,'%')
+    print('%s Pure Win ' % team2, team2WinPct,'%')
+    print('Tie ', tie/(team1win+team2win+tie), '%')
+    #+ - percent from the return of findAdv() here before printing to console
+    teamDiff = findAdvantage()
+    if teamDiff["team"] == team1:
+        team1WinPct = (team1win/(team1win+team2win+tie)) + (teamDiff["diff"]/100)
+        team2WinPct = (team2win/(team1win+team2win+tie)) - (teamDiff["diff"]/100)
+    else:
+        team1WinPct = (team1win/(team1win+team2win+tie)) - (teamDiff["diff"]/100)
+        team2WinPct = (team2win/(team1win+team2win+tie)) + (teamDiff["diff"]/100)
+    print("\n")
+    print("Adjusted Calculation")
+    print("------------------------------------------")
+    print('%s Win '  % team1, team1WinPct,'%')
+    print('%s Win ' % team2, team2WinPct,'%')
     print('Tie ', tie/(team1win+team2win+tie), '%')
     return gamesout
 

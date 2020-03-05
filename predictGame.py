@@ -44,8 +44,6 @@ games2 = gamefinder2.get_data_frames()[0]
 
 team2Record = games2.head()["WL"]
 
-
-
 def findAdvantage():
     team1Games = 0
     team2Games = 0
@@ -134,6 +132,9 @@ def gamesSim(ns):
         elif gm == -1:
             team2win +=1
         else: tie +=1
+    #+ - percent from the return of findAdv() here before printing to console
+    team1WinPct = team1win/(team1win+team2win+tie)
+
     print('%s Win '  % team1, team1win/(team1win+team2win+tie),'%')
     print('%s Win ' % team2, team2win/(team1win+team2win+tie),'%')
     print('Tie ', tie/(team1win+team2win+tie), '%')

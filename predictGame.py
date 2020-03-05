@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-
+import json
 import pandas as pd 
 import random as rnd
 import numpy as np 
@@ -10,6 +10,7 @@ import requests
 import nba_api
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import leaguegamefinder
+from nba_api.stats.endpoints import leaguestandings
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--teams", "-t", help="Supply two teams to calculate against", nargs=2);
@@ -35,7 +36,7 @@ team2Return = teams.find_team_by_abbreviation(team2)
 gamefinder1 = leaguegamefinder.LeagueGameFinder(team_id_nullable=team1Return["id"])
 # The first DataFrame of those returned is what we want.
 games1 = gamefinder1.get_data_frames()[0]
-
+#print(games1)
 team1Record = games1.head()["WL"]
 
 gamefinder2 = leaguegamefinder.LeagueGameFinder(team_id_nullable=team2Return["id"])
@@ -43,6 +44,11 @@ gamefinder2 = leaguegamefinder.LeagueGameFinder(team_id_nullable=team2Return["id
 games2 = gamefinder2.get_data_frames()[0]
 
 team2Record = games2.head()["WL"]
+# LETS GOOOOOOOOOO
+standings = leaguestandings.LeagueStandings(league_id="00", season="2019-20", season_type="Regular Season")
+#Pulled in team stats -- calculate home/winloss depending on who is team1
+print(standings.get_data_frames()[0].query("TeamID == %s" % team1Return["id"]))
+
 
 def findAdvantage():
     team1Games = 0
@@ -60,6 +66,8 @@ def findAdvantage():
         result["team"] = team2
         result["diff"] =  (team2Games - team1Games) * 2
     return result
+
+    
 
 # Rudimentary helper function to find the difference between each team's past 5 games
 # print(findAdvantage())
